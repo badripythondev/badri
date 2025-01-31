@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Poll Details</title>
+</head>
+<body>
+{% extends 'polls/base.html' %}
+{% block content %}
+<h1 class="text-center mb-3">Poll Question</h1>
+<div class="card mb-3">
+   <div class="card-body">
+        <!-- Display the specific question -->
+        <p class="lead">{{ question.question_text }}</p>
+
+        <!-- Display form for voting -->
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            {% for choice in question.choice_set.all %}
+                <div>
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary mt-2">Vote</button>
+        </form>
+
+        <!-- Links for additional actions -->
+        <a href="{% url 'polls:results' question.id %}" class="btn btn-secondary mt-3" aria-label="View results for {{ question.question_text }}"> View Results</a>
+   </div>
+</div>
+{% endblock %}
+</body>
+</html>
